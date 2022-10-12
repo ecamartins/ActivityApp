@@ -1,0 +1,10 @@
+.activityList1{
+    color: red;
+    border: #61dafb dashed 5px;
+    margin: 5px;
+}
+
+.activityList1 > li:hover{
+    color: purple
+}
+

@@ -1,0 +1,20 @@
+.form {
+    width: 300px;
+    margin: 50px
+}
+
+.books {
+    margin: 50px
+}
+
+.submitButtonContainer {
+    width: 300px;
+    margin: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.submitButton {
+    width: 200px;
+}

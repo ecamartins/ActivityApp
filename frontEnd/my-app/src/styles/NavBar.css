@@ -1,0 +1,19 @@
+.container {
+    width: 80%;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    padding: 0 10%;
+}
+
+.link{
+    color: red;
+    font-style: normal;
+}
+
+.link:hover{
+    background-color: grey;
+}
+

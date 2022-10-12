@@ -1,0 +1,22 @@
+.Header {
+    background-color: aliceblue;
+    display: flex;
+    justify-content: space-around;
+}
+
+.Header > h1{
+    color: darkblue;
+    font-family: bold;
+}
+
+
+
+
+
+
+
+
+
+
+
+

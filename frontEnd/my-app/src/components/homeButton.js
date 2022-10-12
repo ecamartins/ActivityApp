@@ -22,10 +22,11 @@ class HomeButton extends Component {
     componentDidMount() { //builtin react function
         this.getButtonText(); //this is the function call
     }
+
     render(){
         return ( //can only return 1 element
             <div>
-                <button className="button1">{this.state.buttonText}</button> <br/>
+                <button className="button1">{this.props.buttonText}</button> <br/>
             </div>
         )
     }
