@@ -1,6 +1,7 @@
 .form {
     width: 300px;
-    margin: 50px
+    margin: 50px;
+    color: darkblue;
 }
 
 .books {
@@ -17,4 +18,5 @@
 
 .submitButton {
     width: 200px;
+    color: darkblue;
 }

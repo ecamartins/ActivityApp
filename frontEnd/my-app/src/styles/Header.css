@@ -1,12 +1,13 @@
 .Header {
-    background-color: aliceblue;
+    background-color: #63d0ff;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 .Header > h1{
-    color: darkblue;
+    color: black;
     font-family: bold;
+    font-family: LilitaOne;
 }
 
 

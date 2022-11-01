@@ -10,7 +10,7 @@ class Header extends Component{
     render(){
         return (
             <div className={'Header'}>
-                <h1>Physical Activity Tracker <GiWeightLiftingUp/></h1>
+                <h1> <GiWeightLiftingUp/>Physical Activity Tracker</h1>
             </div>
         )
     }

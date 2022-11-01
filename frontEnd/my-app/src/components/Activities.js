@@ -64,8 +64,6 @@ class ActivityLog extends Component {
                 activity: this.state.activity,
                 duration: this.state.duration,
             });
-
-        console.log(body);
         fetch('http://localhost:4000/newActivity', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
@@ -88,30 +86,6 @@ class ActivityLog extends Component {
         return (
             <div>
                 <div className='form'>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
                     <label>Name</label>
                     <textarea color={"secondary"}
                               value={this.state.name}

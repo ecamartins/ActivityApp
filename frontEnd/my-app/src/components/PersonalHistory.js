@@ -5,6 +5,7 @@ class PersonalHistory extends Component {
         super(props);
         this.state = {
             activities: [],
+            name: '',
             duration: '',
             isShown: false
         }
@@ -36,6 +37,7 @@ class PersonalHistory extends Component {
                 )
             }
         }
+
         return activities;
     }
     handleNameInput(event) {
@@ -56,7 +58,7 @@ class PersonalHistory extends Component {
                     Enter your name to view your activity history: <br/>
                     <label>
                         Name:
-                        <input type="text" name="Name" onChange={this.handleNameInput}/>
+                        <input type="text" name="Name" value={this.state.name} onChange={this.handleNameInput}/>
                     </label>
                     <input type="button" value="Submit" onClick={this.displayHistory} />
                 </form>

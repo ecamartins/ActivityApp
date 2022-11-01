@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: "LilitaOne";
+  src: local("LilitaOne"),
+  url("./fonts/LilitaOne-Regular.ttf") format("truetype");
+  font-weight: normal;
+}

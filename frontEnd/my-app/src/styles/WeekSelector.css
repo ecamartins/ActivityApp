@@ -1,0 +1,14 @@
+.week-container{
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    margin: 5vh;
+}
+
+.week-container > h1{
+    margin: 0.25%;
+    font-family: LilitaOne;
+}
+
+
+
