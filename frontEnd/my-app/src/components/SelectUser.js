@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import "../styles/SelectUser.css";
+import CreateUser from "./CreateUser";
 
 class SelectUser extends Component{
     constructor(props) {
@@ -8,18 +9,16 @@ class SelectUser extends Component{
             user_id: "",
             first_name: "",
             last_name: "",
-            users: []
+            users: [],
+            createUser: false
         }
-        // this.handleChange = this.handleChange.bind(this);
-        // this.handleSubmit = this.handleSubmit.bind(this);
-        // this.handleDropDown = this.handleDropDown.bind(this);
     }
 
     componentDidMount() {
         this.getCurrentUsers();
     }
 
-    handleSubmit = (event) => {
+    handleSubmit = () => {
         this.props.parentCallback(this.state.user_id);
     }
 
@@ -30,7 +29,6 @@ class SelectUser extends Component{
             .then(res => JSON.parse(res))
             .then(res => this.setState({ users: res }))
     }
-
 
     getUsersDisplay() {
         let users = this.state.users;
@@ -44,31 +42,49 @@ class SelectUser extends Component{
         return dropdown_list;
     }
 
-    // handleDropDown(event){
-    //     this.setState({user_id: event.target.value});
-    // }
-
     handleDropDown = (event) => {
+        // if target value is -1, render the CreateUser component
+        if (event.target.value == -1){
+            this.setState({createUser: true});
+        }
         this.setState({user_id: event.target.value});
     }
 
+    closeComponent = (flag) =>{
+        this.setState({createUser: flag});
+        //this.getCurrentUsers();
+    }
+    getId = (id) =>{
+        this.setState({user_id:id});
+        this.getUsersDisplay();
+    }
+
     render(){
-        return (
-            <div className={"log-in-container"}>
-                <h2>Existing Users:</h2>
-                <form>
-                    <label>
-                        User: <br/>
-                        <select className={"select-box"} value={this.state.user_id} onChange={this.handleDropDown}>
-                            <option value=''> -- select a user --</option>
-                            {this.getUsersDisplay()}
-                        </select>
-                        <br/>
-                        <button value="Submit" onClick={this.handleSubmit}>Submit</button>
-                    </label>
-                </form>
-            </div>
-        )
+        if (this.state.createUser){
+            return(
+                <div className={"log-in-container"}>
+                    <CreateUser className={"new-user"} sendId={this.getId} close={this.closeComponent}/>
+                </div>
+            )
+        } else {
+            return (
+                <div className={"log-in-container"}>
+                    <h2>Existing Users:</h2>
+                    <form>
+                        <label>
+                            User: <br/>
+                            <select className={"select-box"} value={this.state.user_id} onChange={this.handleDropDown}>
+                                <option value=''> -- select a user --</option>
+                                {this.getUsersDisplay()}
+                                <option value={-1}>-- create new user --</option>
+                            </select>
+                            <br/>
+                            <button className={"select-button"} value="Submit" onClick={this.handleSubmit}>Submit</button>
+                        </label>
+                    </form>
+                </div>
+            )
+        }
     }
 }
 

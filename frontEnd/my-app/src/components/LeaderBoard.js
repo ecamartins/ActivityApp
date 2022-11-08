@@ -16,17 +16,17 @@ class LeaderBoard extends Component {
     }
 
     componentDidMount(){
-        this.getRanking();
+        this.getRanking(this.state.week_num);
     }
 
     setWeekNum = (week) =>{
         this.setState({week_num: week})
-        this.getRanking();
+        this.getRanking(week);
     }
 
-    getRanking = () => {
-        const week = encodeURIComponent(this.state.week_num);
-        fetch(`http://localhost:4000/ranking/?week_num=${week}`)
+    getRanking = (week) => {
+        const encoded_week = encodeURIComponent(week);
+        fetch(`http://localhost:4000/ranking/?week_num=${encoded_week}`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({ ranking: res }));
@@ -52,7 +52,7 @@ class LeaderBoard extends Component {
     render(){
         return(
         <div className={"board"}>
-            <WeekSelector sendWeek={this.setWeekNum}/>
+            <WeekSelector title={"Leader Board"} sendWeek={this.setWeekNum}/>
             <div className={"ranking-container"}>
                 {this.leaderBoardUI()}
             </div>

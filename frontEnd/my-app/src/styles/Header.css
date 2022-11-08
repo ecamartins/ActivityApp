@@ -1,14 +1,23 @@
-.Header {
+.header {
     background-color: #63d0ff;
     display: flex;
-    justify-content: center;
+    flex-flow: row wrap;
+    justify-content: space-between;
 }
 
-.Header > h1{
+.header > h1{
     color: black;
     font-family: bold;
     font-family: LilitaOne;
 }
+
+.header > button{
+    height: 5vh;
+    align-self: center;
+    margin-right: 3vh;
+}
+
+
 
 
 

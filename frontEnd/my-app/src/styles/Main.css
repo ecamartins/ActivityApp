@@ -5,7 +5,7 @@
     align-items: center;
 }
 
-h1 {
+.account > h1 {
     color: black;
     font-family: LilitaOne;
 }

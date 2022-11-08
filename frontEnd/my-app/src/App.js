@@ -6,12 +6,23 @@ import Header from "./components/Header"
 
 
 class App extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            display_logout: false,
+        }
+    }
+
+    getLogoutFlag = (flag) =>{
+        this.setState({display_logout: flag});
+    }
+
     render(){
         return (
             <div className={"page"}>
-                <Header/>
+                <Header send_logout_flag={this.getLogoutFlag} show_logout={this.state.display_logout}/>
                 <div className={"main-container"}>
-                    <Main/>
+                    <Main send_logout_flag={this.getLogoutFlag} />
                 </div>
             </div>)
     }

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {DateTime} from "luxon";
 import SetGoal from "./SetGoal";
 import "../styles/UserProfile.css";
+import AddToLog from "./AddToLog";
 
 class UserProfile extends Component{
     constructor(props) {
@@ -20,9 +21,6 @@ class UserProfile extends Component{
     componentDidMount() {
         this.getUserName();
         this.getUserActivityHistory();
-        // if (this.state.target_minutes !=-1){
-        //     this.getUserActivityHistory();
-        // }
     }
 
     getUserName = () => {
@@ -64,19 +62,23 @@ class UserProfile extends Component{
         this.setState({target_minutes: goal});
     }
 
+    getPercentage = (total) =>{
+        this.setState({percent: total/this.state.target_minutes});
+    }
+
     render() {
-        // if (this.state.target_minutes == -1) {
-        //     return (
-        //         <div>
-        //         <h1>{this.state.first_name} {this.state.last_name}'s Profile:</h1>
-        //         <SetGoal
-        //             sendGoal={this.getGoal}
-        //             user_id={this.state.user_id}
-        //             target_minutes={this.state.target_minutes}
-        //             week={this.state.week}/>
-        //         </div>
-        //     )
-        // } else {
+        if (this.state.target_minutes == -1) {
+            return (
+                <div>
+                <h1>{this.state.first_name} {this.state.last_name}'s Profile:</h1>
+                <SetGoal
+                    sendGoal={this.getGoal}
+                    user_id={this.state.user_id}
+                    target_minutes={this.state.target_minutes}
+                    week={this.state.week}/>
+                </div>
+            )
+        } else {
             return (
                 <div>
                     <h1>•• {this.state.first_name} {this.state.last_name}'s Profile ••</h1>
@@ -86,9 +88,10 @@ class UserProfile extends Component{
                         <p>Remaining Minutes: {this.getRemaining()} min</p>
                         <p>Percentage Completed: {this.state.percent.toFixed(1)}%</p>
                     </div>
+                    <AddToLog className={"log"} sendPercent={this.getPercentage} user_id={this.state.user_id}/>
                 </div>)
         }
-    //}
+    }
 }
 
 export default UserProfile

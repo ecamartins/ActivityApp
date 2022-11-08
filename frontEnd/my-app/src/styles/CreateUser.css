@@ -1,7 +1,8 @@
-h2{
+.new-user-container > h2{
     font-family: LilitaOne;
+    text-align: left;
 }
-input[type=submit] {
+.new-user-container > form > button {
     width: 30vh;
     background-color: #63d0ff;
     color: black;
@@ -12,7 +13,7 @@ input[type=submit] {
     cursor: pointer;
 }
 
-input[type=text] {
+.new-user-container > form > input[type=text] {
     width: 50vh;
     padding: 12px 20px;
     margin: 8px 0;
@@ -22,18 +23,12 @@ input[type=text] {
     box-sizing: border-box;
 }
 
-input[type=submit]:hover {
+.new-user-container > form > button:hover {
     background-color: rgba(7, 112, 196, 0.9);
 }
 
-input[type=text] {
-    padding:10px;
-    margin:10px 0;
-}
-
-form {
+.new-user-container > form {
     border-radius: 5px;
     background-color: #f2f2f2;
     padding: 20px;
-    margin: 20px;
 }

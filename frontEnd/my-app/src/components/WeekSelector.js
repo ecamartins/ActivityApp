@@ -15,20 +15,18 @@ class WeekSelector extends Component{
         return parseInt(val.slice(0,4));
     }
 
-    getWeek = (val) =>{
-        return parseInt(val.slice(6,8));
-    }
-
     handleDate = (event) => {
         let raw_value = event.target.value;
+        console.log(raw_value);
 
         // Extract year and week from raw string value
         let year = this.getYear(raw_value);
-        let week = this.getWeek(raw_value);
+        let week = DateTime.fromISO(raw_value).weekNumber;
+        console.log(week);
         this.setState({year_num: year, week_num: week});
 
         //Send selected week to parent component
-        this.props.sendWeek(this.state.week_num);
+        this.props.sendWeek(week);
     }
 
     render(){
@@ -38,15 +36,18 @@ class WeekSelector extends Component{
         const cur = ""+this.state.year_num+"-W"+this.state.week_num;
         return(
             <div className={"week-container"}>
-                <h1> Leader Board for:  </h1>
+                <h1> {this.props.title} for Week {this.state.week_num}</h1>
+                <div>
+                <label className={"change-week"}>Change week:
                 <input
-                    type="week"
+                    type="date"
                     name="week"
                     min="2022-W41"
                     value={cur}
                     max={max_entry} required
-                    onChange={this.handleDate}>
-                </input>
+                    onChange={this.handleDate}/>
+                </label>
+                </div>
             </div>
         )
     }

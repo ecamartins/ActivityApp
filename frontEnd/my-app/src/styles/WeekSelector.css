@@ -1,13 +1,24 @@
 .week-container{
     display: flex;
-    flex-flow: row;
+    flex-flow: column;
     justify-content: center;
+    align-items: center;
     margin: 5vh;
 }
 
 .week-container > h1{
     margin: 0.25%;
     font-family: LilitaOne;
+}
+
+.change-week > input{
+    width: 6%;
+}
+
+.change-week{
+    text-align: left;
+    display: flex;
+    justify-content: center;
 }
 
 

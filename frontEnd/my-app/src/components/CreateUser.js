@@ -29,23 +29,29 @@ class CreateUser extends Component{
                 alert("Error " + error)
             })
 
-        this.getNewActiveUser()
+        //this.getNewActiveUser()
         this.setState({
             first_name: '',
             last_name: ''
         })
-    };
-
-    getNewActiveUser= ()=>{
-        fetch('http://localhost:4000/maxId')
-            .then(res => res.text())
-            .then(res => JSON.parse(res))
-            .then(res => this.setState({ user_id: res}));
-        this.onCreateNewUser();
+        this.handleClose();
     }
+    //
+    // getNewActiveUser= ()=>{
+    //     fetch('http://localhost:4000/maxId')
+    //         .then(res => res.text())
+    //         .then(res => JSON.parse(res))
+    //         .then(res => this.onCreateNewUser(res.id))
+    //         .then(res => this.setState({ user_id: res.id}));
+    //         //.then(res => this.onCreateNewUser(res.id));
+    // }
 
-    onCreateNewUser = () =>{
-        this.props.parentCallback(this.state.user_id);
+    // onCreateNewUser = (id) =>{
+    //     this.props.sendId(id);
+    // }
+
+    handleClose = () =>{
+        this.props.close(false);
     }
 
     handleFirstName = (event) => {
@@ -62,7 +68,7 @@ class CreateUser extends Component{
     render(){
         return (
             <div className={"new-user-container"}>
-                <h2>New Users:</h2>
+                <h2>New User:</h2>
                 <form>
                     <label><br/>First Name:<br/></label>
                     <input type="text" defaultValue={this.state.first_name} placeholder="First Name"  onChange={this.handleFirstName}/>

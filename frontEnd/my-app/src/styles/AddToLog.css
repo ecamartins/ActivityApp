@@ -1,12 +1,9 @@
-.new-user{
-    position: absolute;
-}
-
-.log-in-container > h2{
+.log-container > h2{
     font-family: LilitaOne;
     text-align: left;
+    margin-left: 10%;
 }
-button.select-button {
+.log-container > form > button {
     width: 30vh;
     background-color: #63d0ff;
     color: black;
@@ -17,8 +14,8 @@ button.select-button {
     cursor: pointer;
 }
 
-select.select-box {
-    width: 50vh;
+.log-container > form > input[type=number] {
+    width: 15vh;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
@@ -27,12 +24,19 @@ select.select-box {
     box-sizing: border-box;
 }
 
-button.select-button:hover {
+.log-container > form > button:hover {
     background-color: rgba(7, 112, 196, 0.9);
 }
 
-.log-in-container > form {
+.log-container > form {
     border-radius: 5px;
     background-color: #f2f2f2;
     padding: 20px;
+    width: 60vh;
+    margin-left: 10%;
+    color: black;
+}
+
+#log-date{
+    margin-left: 8px;
 }

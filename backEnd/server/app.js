@@ -41,36 +41,121 @@ app.get('/ranking', (req, res) => {
     })
 })
 
-app.get('/userActivityHistory', (req, res) => {
-
-    let user_id = Number(req.query.user_id);
-    let week = Number(req.query.week);
-    connection.query(`select first_name, last_name, target_minutes, sum(duration) as total, sum(duration)/target_minutes*100 as percent from (select * from goals where week_num = '${week}') as filtered_goals natural join users natural join (select * from history where week(date) = '${week}') as weekly_hist where user_id = '${user_id}'`, (err, info) => {
+app.get('/activityList', (req, res) => {
+    connection.query(`select activity_name, activity_id from activities order by activity_name asc`, (err, rows) => {
         if (err) throw err
-        console.log(info);
-        let response = {};
-        // if the results of the query are empty, then the user has not set their weekly goal
-        if (info[0].target_minutes == null) {
-            response = {
-                first_name: '',
-                last_name: '',
-                target_minutes: -1,
-                percent: -1.0,
-                total: -1,
-            }
-            // otherwise, query was not empty so send info
-        } else {
-                response = {
-                    first_name: info[0].first_name,
-                    last_name: info[0].last_name,
-                    target_minutes: info[0].target_minutes,
-                    percent: info[0].percent,
-                    total: info[0].total,
+        let response = [];
+
+
+        for (let row of rows) {
+            response.push(
+                {
+                    activity_id: row.activity_id,
+                    activity_name: row.activity_name
                 }
+            );
         }
         res.send(response);
     })
 })
+
+app.post('/addToLog', (req, res) => {
+    const user_id = Number(req.body.user_id);
+    const activity_id = Number(req.body.activity_id);
+    const date = req.body.date.toString();
+    const duration = Number(req.body.duration);
+    console.log("user_id: " + user_id);
+    console.log("duration: " + duration);
+    console.log("act_id: " + activity_id);
+    console.log("date: " + date);
+
+    connection.query(`insert into history (user_id, activity_id, duration, date) values ('${user_id}','${activity_id}', '${duration}', '${date}')`);
+})
+
+app.get('/userActivityHistory', (req, res) => {
+
+    let user_id = Number(req.query.user_id);
+    let week = Number(req.query.week);
+    connection.query(`select * from goals where user_id = '${user_id}' and week_num = '${week}'`, (err, info) => {
+        if (err) throw err
+        let response = {};
+        //if the results of the query are empty, then the user has not set their weekly goal
+        if (info.length == 0) {
+            response = {
+                target_minutes: -1,
+                percent: 0.0,
+                total: 0,
+            }
+            res.send(response);
+
+            // otherwise, goal is set so check if user has history for given week
+        } else {
+            connection.query(`select * from history where user_id = '${user_id}' and week(date) = '${week}'`, (err, info2) => {
+                if (err) throw err
+                // if there is no history, then the user only has a goal with no entered history for the given week
+                if (info2.length == 0){
+                    response = {
+                        target_minutes: info[0].target_minutes,
+                        percent: 0.0,
+                        total: 0,
+                    }
+                    res.send(response);
+                    // otherwise, the user has both a goal and history for given week, get compute total and percent
+                } else{
+                    connection.query(`select target_minutes, sum(duration) as total, sum(duration)/target_minutes *100 as percent from history natural join goals where user_id = '${user_id}' and week(date) = '${week}' and week_num = '${week}';`, (err, info3) => {
+                        if (err) throw err
+                        let response = {
+                            target_minutes: info3[0].target_minutes,
+                            percent: info3[0].percent,
+                            total: info3[0].total,
+                        }
+                        res.send(response);
+                    })
+                }
+
+            })
+
+        }
+    })
+})
+
+
+
+    //getting goal infor for selected week
+    // connection.query(`select * from goals where week_num = '${week}' and user_id='${user_id}'`, (err, info) => {
+    //     // get the target minutes
+    //     // get total duration for the given week (inside this query) to set my duration
+    // }
+
+    // connection.query(`select first_name, last_name, target_minutes, sum(duration) as total, sum(duration)/target_minutes*100 as percent from (select * from goals where week_num = '${week}') as filtered_goals natural join users natural join (select * from history where week(date) = '${week}') as weekly_hist where user_id = '${user_id}'`, (err, info) => {
+    //     if (err) throw err
+    //     console.log("Info:")
+    //     console.log(info);
+    //     let response = {};
+    //     // if the results of the query are empty, then the user has not set their weekly goal
+    //     if (info[0].target_minutes == null) {
+    //         response = {
+    //             first_name: '',
+    //             last_name: '',
+    //             target_minutes: -1,
+    //             percent: -1.0,
+    //             total: -1,
+    //         }
+    //         // otherwise, query was not empty so send info
+    //     } else {
+    //             response = {
+    //                 first_name: info[0].first_name,
+    //                 last_name: info[0].last_name,
+    //                 target_minutes: info[0].target_minutes,
+    //                 percent: info[0].percent,
+    //                 total: info[0].total,
+    //             }
+    //     }
+    //     console.log("Response:")
+    //     console.log(response);
+    //     res.send(response);
+    // })
+
 
 app.get('/userName', (req, res) => {
     let user_id = Number(req.query.user_id);
@@ -94,16 +179,36 @@ app.post('/createUser', (req, res) => {
         if (err) throw err
         let cur_id = rows[0].max_id;
         cur_id = cur_id + 1;
-        connection.query(`INSERT INTO users (user_id, first_name, last_name) VALUES (${cur_id},'${first_name}', '${last_name}')`);
+        connection.query(`INSERT INTO users (user_id, first_name, last_name) VALUES (${cur_id},'${first_name}', '${last_name}')`,(err, rows) => {
+            res.send();
+        })
     })
 })
 
+
+
 app.get('/maxId', (req, res) => {
-    console.log("here");
-    connection.query('select max(user_id) as max_id from users', (err, id) => {
+    connection.query(`select max(user_id) as max_id from users`, (err, id) => {
         if (err) throw err
-        res.send(id[0].max_id.toString());
-        console.log(id[0].max_id);
+        res.send({id:id[0].max_id});
+    })
+})
+
+app.get('/maxActId', (req, res) => {
+    connection.query(`select max(activity_id) as max_id from activities`, (err, id) => {
+        if (err) throw err
+        res.send({id:id[0].max_id});
+    })
+})
+
+app.post('/createActivity', (req, res) => {
+    const activity_name = req.body.activity_name.toString();
+
+    connection.query(`select max(activity_id) as max_id from activities`, (err, rows) => {
+        if (err) throw err
+        let cur_id = rows[0].max_id;
+        cur_id = cur_id + 1;
+        connection.query(`INSERT INTO activities (activity_id, activity_name) VALUES (${cur_id},'${activity_name}')`);
     })
 })
 
@@ -112,7 +217,7 @@ app.post('/submitGoal', (req) => {
     const target_minutes = Number(req.body.target_minutes);
     const week = Number(req.body.week);
 
-    connection.query(`insert into goals (user_id, week_num, target_minutes) VALUES ('${user_id}', '${week}', '${target_minutes}')`);
+    connection.query(`insert into goals (user_id, week_num, target_minutes) VALUES (${user_id}, ${week}, ${target_minutes})`);
 })
 
 
@@ -187,7 +292,7 @@ app.post('/submitGoal', (req) => {
 // })
 //
 app.get('/members', (req, res) => {
-    connection.query('SELECT user_id, first_name, last_name FROM users', (err, rows) => {
+    connection.query('select user_id, first_name, last_name from users order by first_name, last_name asc', (err, rows) => {
         if (err) throw err
         let response = [];
 
@@ -200,6 +305,7 @@ app.get('/members', (req, res) => {
                 }
             );
         }
+        console.log("getUsers in backend: " + response);
         res.send(response);
     })
 })
