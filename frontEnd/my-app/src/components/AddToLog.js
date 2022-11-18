@@ -7,14 +7,15 @@ class AddToLog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            activity_id: -1,
+            activity_id: -2,
             activity_name: '',
             duration: 0,
             date: DateTime.local(DateTime.now()).toISODate(),
             activities: [],
-            create_activity: false
+            create_activity: false,
         }
     }
+
     componentDidMount() {
         this.getActivityList();
     }
@@ -29,7 +30,6 @@ class AddToLog extends Component {
 
     handleDuration = (event) =>{
         let dur = event.target.value;
-        console.log("dur = "+ dur);
         this.setState({duration: dur});
     }
 
@@ -39,7 +39,7 @@ class AddToLog extends Component {
     }
 
     getActivityList = () => {
-        fetch(`http://localhost:4000/activityList/`)
+        fetch(`http://localhost:4000/activityList`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({ activities: res }));
@@ -50,7 +50,7 @@ class AddToLog extends Component {
         let display = [];
         for (let i = 0; i < acts.length; i++){
             let cur = acts[i];
-            display[i] = <option value={cur.activity_id}>{cur.activity_name}</option>
+            display[i] = <option id={cur.activity_id} value={cur.activity_id}>{cur.activity_name}</option>
         }
         return display;
     }
@@ -65,7 +65,6 @@ class AddToLog extends Component {
                 date: this.state.date
             }
         );
-        console.log("body = "+ body);
 
         fetch('http://localhost:4000/addToLog', {
             method: 'post',
@@ -78,24 +77,24 @@ class AddToLog extends Component {
             })
 
         this.setState({
-            activity_id: -1,
+            activity_id: -2,
             activity_name: '',
             duration: 0,
             date: DateTime.local(DateTime.now()).toISODate()}
         )
+        this.getActivityList();
+        this.props.is_on_addToLog(false)
     }
     closeCreate = (flag) =>{
+        this.getActivityList();
         this.setState({create_activity: flag});
-    }
-
-    getActId = (id) => {
-        this.setState({activity_id: id});
+        this.setState({activity_id: -2}); // reset dropdown to display select activity option
     }
 
     render() {
 
         if (this.state.create_activity) {
-            return (<CreateActivity sendActId={this.getActId} closeAct={this.closeCreate}/>)
+            return (<CreateActivity activities = {this.state.activities}  create_activity={this.closeCreate}/>)
         }else {
                 const first_day_of_week = DateTime.now().startOf('week').toISODate();
                 const today = DateTime.local(DateTime.now()).toISODate();
@@ -106,7 +105,7 @@ class AddToLog extends Component {
                             <label> Activity Name: </label>
                             <select className={"select-box"} value={this.state.activity_id}
                                     onChange={this.handleDropDown}>
-                                <option value=''> -- select an activity --</option>
+                                <option value={-2}> -- select an activity --</option>
                                 {this.getActivityDisplay()}
                                 <option value={"$"}>-- add new activity --</option>
                             </select>

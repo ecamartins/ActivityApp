@@ -3,6 +3,7 @@ import {DateTime} from "luxon";
 import SetGoal from "./SetGoal";
 import "../styles/UserProfile.css";
 import AddToLog from "./AddToLog";
+import ViewHistory from "./ViewHistory";
 
 class UserProfile extends Component{
     constructor(props) {
@@ -14,7 +15,8 @@ class UserProfile extends Component{
             target_minutes: -1,
             total: 0,
             percent: 0,
-            week: DateTime.local(DateTime.now()).weekNumber
+            week: DateTime.local(DateTime.now()).weekNumber,
+            is_on_addToLog: false
         }
     }
 
@@ -62,15 +64,17 @@ class UserProfile extends Component{
         this.setState({target_minutes: goal});
     }
 
-    getPercentage = (total) =>{
-        this.setState({percent: total/this.state.target_minutes});
+    hideAddToLog = (flag) =>{
+        this.setState({is_on_addToLog: flag})
+        this.getUserActivityHistory();
+        this.props.is_on_create_activity(false);
     }
 
     render() {
         if (this.state.target_minutes == -1) {
             return (
-                <div>
-                <h1>{this.state.first_name} {this.state.last_name}'s Profile:</h1>
+                <div className={"user-profile"}>
+                    <h1>•• {this.state.first_name} {this.state.last_name}'s Profile ••</h1>
                 <SetGoal
                     sendGoal={this.getGoal}
                     user_id={this.state.user_id}
@@ -79,16 +83,19 @@ class UserProfile extends Component{
                 </div>
             )
         } else {
+            let hist_display = <ViewHistory is_on_addToLog={this.hideAddToLog} user_id = {this.state.user_id}/>;
             return (
-                <div>
+                <div className={"user-profile"}>
                     <h1>•• {this.state.first_name} {this.state.last_name}'s Profile ••</h1>
-                    <h1>••••••••••••••••</h1>
                     <div className={"summary"}>
                         <h2>Weekly Goal: {this.state.target_minutes} min</h2>
+                        <p>Total Minutes: {this.state.total} min</p>
                         <p>Remaining Minutes: {this.getRemaining()} min</p>
-                        <p>Percentage Completed: {this.state.percent.toFixed(1)}%</p>
+                        {this.state.percent > 100 ? <p>Percentage Completed: > 100%</p>: <p>Percentage Completed: {this.state.percent.toFixed(1)}%</p>}
                     </div>
-                    <AddToLog className={"log"} sendPercent={this.getPercentage} user_id={this.state.user_id}/>
+                    {this.state.is_on_addToLog ?
+                        <AddToLog className={"log"} is_on_addToLog={this.hideAddToLog} user_id={this.props.user_id}/>:hist_display}
+
                 </div>)
         }
     }

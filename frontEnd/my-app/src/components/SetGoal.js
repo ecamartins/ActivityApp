@@ -1,10 +1,11 @@
 import React, {Component} from "react";
+import "../styles/SetGoal.css";
 
 class SetGoal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            target_minutes: -1,
+            target_minutes: 0,
         }
     }
 
@@ -39,15 +40,11 @@ class SetGoal extends Component {
     }
 
     render() {
-        console.log({
-            user_id: this.props.user_id,
-            target_minutes: this.props.target_minutes,
-            week: this.props.week
-        })
         return (
-            <div className={"new-user-container"}>
+            <div className={"new-goal-container"}>
+                <h2>Set goal for week {this.props.week}:</h2>
                 <form>
-                    <label>Enter target Minutes for this week:</label>
+                    <label>Enter target minutes for this week:</label><br/>
                     <input type="number" defaultValue={0}  value={this.state.target_minutes} min={0} max={10000}
                            onChange={this.handleGoal}/>
                     <button value="Submit" onClick={this.handleSubmit}>Submit</button>

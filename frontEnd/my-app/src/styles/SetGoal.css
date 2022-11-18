@@ -1,0 +1,45 @@
+.new-goal-container{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.new-goal-container > form > button {
+    width: 20vh;
+    background-color: #63d0ff;
+    color: black;
+    padding: 14px 20px;
+    margin-left: 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.new-goal-container > form > input[type=number] {
+    width: 10vh;
+    padding: 12px 20px;
+    margin-right: 1vh;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.new-goal-container > form > button:hover {
+    background-color: rgba(7, 112, 196, 0.9);
+}
+
+.new-goal-container > form {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 3vh;
+    width: 40vh;
+    margin-right: 1vh;
+}
+
+.new-goal-container > h2 {
+    font-family: LilitaOne;
+    text-align: left;
+    margin-right: 1vh;
+}

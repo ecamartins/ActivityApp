@@ -1,0 +1,35 @@
+.history{
+    background-color: #f2f2f2;
+    border-radius: 4px;
+    margin: 0vh 15vh 5vh 8vh;
+    padding: 0.75vh 0.75vh 0.75vh 0.75vh;
+}
+
+.history > table{
+    width: 100%;
+}
+.history > table> tr> th{
+    border-bottom: black solid 1px;
+}
+
+td.mid-col, td.right-col{
+    text-align: center;
+}
+
+#total-mins{
+    font-weight: bold;
+    border-top: black solid 1px;
+}
+
+#final-row{
+    border-top: black solid 1px;
+}
+
+#empty-log{
+    text-align: center;
+}
+
+.history> p{
+    margin-top: 0;
+    margin-bottom: 0;
+}

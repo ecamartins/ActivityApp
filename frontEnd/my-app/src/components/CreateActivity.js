@@ -11,40 +11,45 @@ class CreateActivity extends Component{
     }
 
     handleSubmit = () => {
+        let found = false;
+        let activities = this.props.activities;
+        for (let i = 0; i < activities.length; i++){
+            if (activities[i].activity_name === this.state.activity_name){
+                found = true;
+                break;
+            }
+        }
+        //only add new activity if it does not exist in current list
+        if (!found) {
+            const body = JSON.stringify(
+                {
+                    activity_name: this.state.activity_name,
+                });
 
-        const body = JSON.stringify(
-            {
-                activity_name: this.state.activity_name,
-            });
-
-        fetch('http://localhost:4000/createActivity', {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: body
-        })
-            .catch(error => {
-                console.log(error);
-                alert("Error " + error)
+            fetch('http://localhost:4000/createActivity', {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: body
             })
-
-        this.getNewActivity()
+                .then(res => {
+                    this.closeCreateComponent();
+                })
+                .catch(error => {
+                    console.log(error);
+                    alert("Error " + error)
+                })
+        } else{
+            alert("This activity already exists");
+        }
+        this.closeCreateComponent();
     };
 
-    getNewActivity= ()=>{
-        fetch('http://localhost:4000/maxActId')
-            .then(res => res.text())
-            .then(res => JSON.parse(res))
-            .then(res => this.setState({ activity_id: res.id}));
-        this.sendBack();
-    }
-
-    sendBack = () =>{
-        this.props.sendActId(this.state.activity_id);
-        this.props.closeAct(false);
+    closeCreateComponent= () =>{
+        this.props.create_activity(false);
     }
 
     handleActivityName = (event) => {
-        this.setState({ activity_name: event.target.value});
+        this.setState({activity_name: event.target.value.toLowerCase()})
     }
 
 

@@ -9,20 +9,20 @@ class App extends Component {
     constructor(props){
         super(props);
         this.state = {
-            display_logout: false,
+            is_on_user_page: false,
         }
     }
 
     getLogoutFlag = (flag) =>{
-        this.setState({display_logout: flag});
+        this.setState({is_on_user_page: flag});
     }
 
     render(){
         return (
             <div className={"page"}>
-                <Header send_logout_flag={this.getLogoutFlag} show_logout={this.state.display_logout}/>
+                <Header send_logout_flag={this.getLogoutFlag} show_logout={this.state.is_on_user_page}/>
                 <div className={"main-container"}>
-                    <Main send_logout_flag={this.getLogoutFlag} />
+                    <Main send_logout_flag={this.getLogoutFlag} is_on_user_page={this.state.is_on_user_page} />
                 </div>
             </div>)
     }

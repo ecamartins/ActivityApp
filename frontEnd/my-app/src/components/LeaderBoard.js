@@ -15,6 +15,15 @@ class LeaderBoard extends Component {
         }
     }
 
+    componentDidUpdate(prevState, prevProps, snap) {
+        if(this.props.update_board == true)
+        {
+            this.getRanking(this.state.week_num);
+            // update is complete so set the state of get_board_update in Main to false
+            this.props.update_incomplete(false);
+        }
+    }
+
     componentDidMount(){
         this.getRanking(this.state.week_num);
     }

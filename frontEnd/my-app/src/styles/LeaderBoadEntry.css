@@ -6,11 +6,18 @@
     background: radial-gradient(circle, #f2f2f2 9%, #63d0ff 87%);
     border-radius: 25px;
     padding: 2%;
-    margin: 1%;
+    margin: 1% auto 1% auto;
     width: 50%;
 }
-.entry-container > h3{
-    text-align: center;
+.rank-icon{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+FaTrophy, FaAward{
+    color: black;
 }
 
 .sub-container {

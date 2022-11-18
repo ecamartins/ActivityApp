@@ -24,34 +24,19 @@ class CreateUser extends Component{
             headers: { 'Content-Type': 'application/json' },
             body: body
         })
+            .then(res => {
+                this.backToLog();
+            })
             .catch(error => {
                 console.log(error);
                 alert("Error " + error)
             })
+        // new user entered into database, now switch back to existing users component
+        this.backToLog();
+    };
 
-        //this.getNewActiveUser()
-        this.setState({
-            first_name: '',
-            last_name: ''
-        })
-        this.handleClose();
-    }
-    //
-    // getNewActiveUser= ()=>{
-    //     fetch('http://localhost:4000/maxId')
-    //         .then(res => res.text())
-    //         .then(res => JSON.parse(res))
-    //         .then(res => this.onCreateNewUser(res.id))
-    //         .then(res => this.setState({ user_id: res.id}));
-    //         //.then(res => this.onCreateNewUser(res.id));
-    // }
-
-    // onCreateNewUser = (id) =>{
-    //     this.props.sendId(id);
-    // }
-
-    handleClose = () =>{
-        this.props.close(false);
+    backToLog =() =>{
+        this.props.is_on_create_user(false);
     }
 
     handleFirstName = (event) => {
@@ -68,7 +53,7 @@ class CreateUser extends Component{
     render(){
         return (
             <div className={"new-user-container"}>
-                <h2>New User:</h2>
+                <h2>New Users:</h2>
                 <form>
                     <label><br/>First Name:<br/></label>
                     <input type="text" defaultValue={this.state.first_name} placeholder="First Name"  onChange={this.handleFirstName}/>
