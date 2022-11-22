@@ -3,6 +3,8 @@ import "../styles/SelectUser.css";
 import "./CreateUser";
 import CreateUser from "./CreateUser";
 
+const config = require('../config');
+
 class SelectUser extends Component{
     constructor(props) {
         super(props);
@@ -25,7 +27,7 @@ class SelectUser extends Component{
 
     getCurrentUsers(){
         let users = [];
-        fetch('http://localhost:4000/members')
+        fetch(`${config.app.host}members`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({ users: res }))

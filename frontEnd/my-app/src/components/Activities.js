@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../styles/Books.css'
 
+const config = require('../config');
+
 // app.get, app.post, app.delete
 
 class ActivityLog extends Component {
@@ -16,7 +18,7 @@ class ActivityLog extends Component {
 
     getActivities() {
         console.log("in getActivities()")
-        fetch('http://localhost:4000/activityLog')
+        fetch(`${config.app.host}/activityLog`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({ activities: res }));
@@ -64,7 +66,7 @@ class ActivityLog extends Component {
                 activity: this.state.activity,
                 duration: this.state.duration,
             });
-        fetch('http://localhost:4000/newActivity', {
+        fetch(`${config.app.host}newActivity`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: body

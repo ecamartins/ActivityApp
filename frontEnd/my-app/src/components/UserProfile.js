@@ -5,6 +5,8 @@ import "../styles/UserProfile.css";
 import AddToLog from "./AddToLog";
 import ViewHistory from "./ViewHistory";
 
+const config = require('../config');
+
 class UserProfile extends Component{
     constructor(props) {
         super(props);
@@ -27,7 +29,7 @@ class UserProfile extends Component{
 
     getUserName = () => {
         const id = encodeURIComponent(this.state.user_id);
-        fetch(`http://localhost:4000/userName/?user_id=${id}`)
+        fetch(`${config.app.host}userName/?user_id=${id}`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({
@@ -41,7 +43,7 @@ class UserProfile extends Component{
     getUserActivityHistory = () => {
         const id = encodeURIComponent(this.state.user_id);
         const cur_week = encodeURIComponent(this.state.week);
-        fetch(`http://localhost:4000/userActivityHistory/?user_id=${id}&week=${cur_week}`)
+        fetch(`${config.app.host}userActivityHistory/?user_id=${id}&week=${cur_week}`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({

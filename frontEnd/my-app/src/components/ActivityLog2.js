@@ -3,6 +3,8 @@ import '../styles/Books.css'
 
 // app.get, app.post, app.delete
 
+const config = require('../config');
+
 class ActivityLog2 extends Component {
     constructor(props) {
         super(props);
@@ -24,14 +26,14 @@ class ActivityLog2 extends Component {
     }
 
     getActivities() {
-        fetch('http://localhost:4000/activityLog')
+        fetch(`${config.app.host}activityLog`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({ activities: res }));
     }
 
     getNameAndID() {
-        fetch('http://localhost:4000/members')
+        fetch(`${config.app.host}members`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({ members: res }));
@@ -40,7 +42,7 @@ class ActivityLog2 extends Component {
 
     getMemberActivties() {
         const nameID = encodeURIComponent(this.state.nameID);
-        fetch(`http://localhost:4000/memberActivities/?nameID=${nameID}`)
+        fetch(`${config.app.host}memberActivities/?nameID=${nameID}`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({ activties: res }));

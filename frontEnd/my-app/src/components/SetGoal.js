@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import "../styles/SetGoal.css";
 
+const config = require('../config');
+
 class SetGoal extends Component {
     constructor(props) {
         super(props);
@@ -18,7 +20,7 @@ class SetGoal extends Component {
                 week: this.props.week
             });
 
-        fetch('http://localhost:4000/submitGoal', {
+        fetch(`${config.app.host}submitGoal`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: body

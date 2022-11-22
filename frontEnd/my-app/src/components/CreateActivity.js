@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import "../styles/CreateActivity.css";
 
+const config = require('../config');
+
 class CreateActivity extends Component{
     constructor(props) {
         super(props);
@@ -26,7 +28,7 @@ class CreateActivity extends Component{
                     activity_name: this.state.activity_name,
                 });
 
-            fetch('http://localhost:4000/createActivity', {
+            fetch(`${config.app.host}createActivity`, {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
                 body: body

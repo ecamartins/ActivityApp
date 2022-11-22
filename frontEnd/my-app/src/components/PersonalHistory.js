@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+const config = require('../config');
+
 class PersonalHistory extends Component {
     constructor(props) {
         super(props);
@@ -15,7 +17,7 @@ class PersonalHistory extends Component {
     }
 
     getActivityHistory() {
-        fetch('http://localhost:4000/activityHistory')
+        fetch(`${config.app.host}activityHistory`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({activities: res}));

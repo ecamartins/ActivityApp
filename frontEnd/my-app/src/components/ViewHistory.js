@@ -3,6 +3,8 @@ import {DateTime} from "luxon";
 import WeekSelector from "./WeekSelector";
 import "../styles/ViewHistory.css";
 
+const config = require('../config');
+
 class ViewHistory extends Component{
     constructor(props){
         super(props);
@@ -26,7 +28,7 @@ class ViewHistory extends Component{
     getHistLog = (week) => {
         const encoded_week = encodeURIComponent(week);
         const id = encodeURIComponent(this.props.user_id);
-        fetch(`http://localhost:4000/histLog/?week_num=${encoded_week}&user_id=${id}`)
+        fetch(`${config.app.host}histLog/?week_num=${encoded_week}&user_id=${id}`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({history: res}));

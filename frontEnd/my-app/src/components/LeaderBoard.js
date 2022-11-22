@@ -4,6 +4,7 @@ import LeaderBoardEntry from "./LeaderBoardEntry";
 import "../styles/LeaderBoard.css";
 import {DateTime} from "luxon";
 
+const config = require('../config');
 
 class LeaderBoard extends Component {
     constructor(props) {
@@ -35,7 +36,7 @@ class LeaderBoard extends Component {
 
     getRanking = (week) => {
         const encoded_week = encodeURIComponent(week);
-        fetch(`http://localhost:4000/ranking/?week_num=${encoded_week}`)
+        fetch(`${config.app.host}ranking/?week_num=${encoded_week}`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({ ranking: res }));

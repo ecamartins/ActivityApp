@@ -3,6 +3,8 @@ import {DateTime} from "luxon";
 import "../styles/AddToLog.css";
 import CreateActivity from "./CreateActivity";
 
+const config = require('../config');
+
 class AddToLog extends Component {
     constructor(props) {
         super(props);
@@ -39,7 +41,7 @@ class AddToLog extends Component {
     }
 
     getActivityList = () => {
-        fetch(`http://localhost:4000/activityList`)
+        fetch(`${config.app.host}activityList`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({ activities: res }));
@@ -66,7 +68,7 @@ class AddToLog extends Component {
             }
         );
 
-        fetch('http://localhost:4000/addToLog', {
+        fetch(`${config.app.host}addToLog`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: body

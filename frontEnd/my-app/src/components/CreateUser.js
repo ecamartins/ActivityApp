@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import "../styles/CreateUser.css";
 
+const config = require('../config');
+
 class CreateUser extends Component{
     constructor(props) {
         super(props);
@@ -19,7 +21,7 @@ class CreateUser extends Component{
                 last_name: this.state.last_name,
             });
 
-        fetch('http://localhost:4000/createUser', {
+        fetch(`${config.app.host}createUser`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: body
