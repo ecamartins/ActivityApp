@@ -1,5 +1,5 @@
 module.exports = {
     app: {
-        host: "http://localhost:4000/"
+        host: "emily-martins-server/api/"
     }
 };
