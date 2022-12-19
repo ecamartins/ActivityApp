@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {DateTime} from "luxon";
 import "../styles/WeekSelector.css"
-import {DatePicker} from "@mui/x-date-pickers";
+
+
+
 
 
 class WeekSelector extends Component{
@@ -9,45 +11,47 @@ class WeekSelector extends Component{
         super(props);
         this.state = {
             year_num: DateTime.local(DateTime.now()).year,
-            week_num: DateTime.local(DateTime.now()).weekNumber
+            week_num: DateTime.local(DateTime.now()).weekNumber,
+            date: DateTime.now().startOf('week')
+
         }
     }
 
-    getYear = (val) =>{
-        return parseInt(val.slice(0,4));
+    handleCurrentClick = () =>{
+        this.setState({date: DateTime.now().startOf('week'),
+                            week_num: DateTime.local(DateTime.now()).weekNumber,
+                            year_num: DateTime.local(DateTime.now()).year});
+        this.props.sendWeek(DateTime.local(DateTime.now()).weekNumber);
     }
 
-    handleDate = (event) => {
-        let raw_value = event.target.value;
-
-        // Extract year and week from raw string value
-        let year = this.getYear(raw_value);
-        let week = DateTime.fromISO(raw_value).weekNumber;
-        this.setState({year_num: year, week_num: week});
-
-        //Send selected week to parent component
-        this.props.sendWeek(week);
+    handlePrevClick = () =>{
+        let prev_week = this.state.date.plus({ days: -7 });
+        this.setState({week_num: prev_week.weekNumber,
+                            year_num: prev_week.year,
+                            date: prev_week});
+        this.props.sendWeek(prev_week.weekNumber);
     }
 
-    render(){
-        const max_year = DateTime.local(DateTime.now()).weekYear;
-        const max_week = DateTime.local(DateTime.now()).weekNumber;
-        const max_entry = ""+max_year+"-W"+max_week;
-        const cur = ""+this.state.year_num+"-W"+this.state.week_num;
+    handleNextClick = () =>{
+        let next_week = this.state.date.plus({ days: 7 });
+        if (DateTime.now().startOf('week') < next_week){
+            return;
+        }
+        this.setState({week_num: next_week.weekNumber,
+            year_num: next_week.year,
+            date: next_week});
+        this.props.sendWeek(next_week.weekNumber);
+    }
+
+        render(){
         return(
             <div className={"week-container"}>
-                <h2> {this.props.title} for Week {this.state.week_num}</h2>
-                <div>
-                    {/*<DatePicker/>*/}
-                <label className={"change-week"}>Change week:
-                <input
-                    type="week"
-                    name="week"
-                    min="2022-W41"
-                    value={cur}
-                    max={max_entry} required
-                    onChange={this.handleDate}/>
-                </label>
+                <h2> {this.props.title} </h2>
+                <p>Week of {this.state.date.toLocaleString(DateTime.DATE_FULL)}</p>
+                <div className={"mini-nav"}>
+                    <button onClick={this.handlePrevClick}>Prev</button>
+                    <button id={"cur"} onClick={this.handleCurrentClick}>Current Week</button>
+                    <button onClick={this.handleNextClick}>Next</button>
                 </div>
             </div>
         )

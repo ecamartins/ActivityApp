@@ -44,7 +44,7 @@ app.get('/ranking', (req, res) => {
 app.get('/histLog', (req, res) => {
     let week = Number(req.query.week_num);
     let user_id = Number(req.query.user_id);
-    connection.query(`select activity_name, duration, date from history natural join users natural join activities where week(date) = '${week}' and user_id = '${user_id}' order by date asc`, (err, rows) => {
+    connection.query(`select activity_name, duration, date, hist_id from history natural join users natural join activities where week(date) = '${week}' and user_id = '${user_id}' order by date asc`, (err, rows) => {
         if (err) throw err
         let response = [];
 
@@ -53,7 +53,8 @@ app.get('/histLog', (req, res) => {
                 {
                     activity_name: row.activity_name,
                     duration: row.duration,
-                    date: row.date
+                    date: row.date,
+                    hist_id: row.hist_id
                 }
             );
         }
@@ -85,13 +86,17 @@ app.post('/addToLog', (req, res) => {
     const date = req.body.date.toString();
     const duration = Number(req.body.duration);
 
-    connection.query(`insert into history (user_id, activity_id, duration, date) values ('${user_id}','${activity_id}', '${duration}', '${date}')`,(err, rows) => {
-        res.send();
+    connection.query(`select max(hist_id) as max_id from history`, (err, rows) => {
+        if (err) throw err
+        let cur_id = rows[0].max_id;
+        cur_id = cur_id + 1;
+        connection.query(`insert into history (user_id, activity_id, duration, date, hist_id) values ('${user_id}','${activity_id}', '${duration}', '${date}', ${cur_id})`,(err, rows) => {
+            res.send();
+        })
     })
 })
 
 app.get('/userActivityHistory', (req, res) => {
-
     let user_id = Number(req.query.user_id);
     let week = Number(req.query.week);
     connection.query(`select * from goals where user_id = '${user_id}' and week_num = '${week}'`, (err, info) => {
@@ -196,8 +201,9 @@ app.post('/submitGoal', (req) => {
     const user_id = Number(req.body.user_id);
     const target_minutes = Number(req.body.target_minutes);
     const week = Number(req.body.week);
+    const year = Number(req.body.year);
 
-    connection.query(`insert into goals (user_id, week_num, target_minutes) VALUES (${user_id}, ${week}, ${target_minutes})`);
+    connection.query(`insert into goals (user_id, week_num, target_minutes, year) VALUES (${user_id}, ${week}, ${target_minutes}, ${year})`);
 })
 
 app.get('/members', (req, res) => {

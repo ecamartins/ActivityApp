@@ -4,11 +4,11 @@
     margin-left: 10%;
 }
 .create-activity > form > button {
-    width: 30vh;
+    width: 20vh;
     background-color: #63d0ff;
     color: black;
     padding: 14px 20px;
-    margin: 8px 0;
+    margin: 8px 2px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -34,4 +34,9 @@
     padding: 20px;
     width: 60vh;
     margin-left: 10%;
+}
+
+.create-activity > form > p{
+    color: red;
+    font-weight: bold;
 }

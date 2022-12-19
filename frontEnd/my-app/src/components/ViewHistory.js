@@ -61,7 +61,7 @@ class ViewHistory extends Component{
             duration = cur.duration;
             total += duration;
             date = DateTime.fromISO(cur.date).toLocaleString(DateTime.DATE_MED); //convert date to format like Oct. 31, 2022
-            hist_display[i] = <tr><td>{name}</td><td className={"mid-col"}>{duration}</td><td className={"right-col"}>{date}</td></tr>;
+            hist_display[i] = <tr id={cur.hist_id}><td>{name}</td><td className={"mid-col"}>{duration}</td><td className={"right-col"}>{date}</td></tr>;
         }
         return (
             <div>
@@ -77,10 +77,12 @@ class ViewHistory extends Component{
     }
 
     render(){
+        const current_week = DateTime.local(DateTime.now()).weekNumber;
+        let display_style = this.state.week_num === current_week ? "visible": "hidden"
         return (
             <div>
                 <WeekSelector title={"Activity Log"} sendWeek = {this.getHistWeek}/>
-                <button className={"hist-button"} onClick={this.handleClick}>Add To Log</button>,
+                <button style={{visibility: display_style}} type={"button"} className={"hist-button"} onClick={this.handleClick}>Add To Log</button>
                 {this.histUI()}
             </div>
         )

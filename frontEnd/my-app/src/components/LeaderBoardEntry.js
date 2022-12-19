@@ -7,6 +7,8 @@ import {FaTrophy, FaAward}  from 'react-icons/fa';
 class LeaderBoardEntry extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+        }
     }
 
     render() {
