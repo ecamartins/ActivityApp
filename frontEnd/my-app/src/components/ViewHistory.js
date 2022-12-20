@@ -10,6 +10,7 @@ class ViewHistory extends Component{
         super(props);
         this.state = {
             week_num: DateTime.local(DateTime.now()).weekNumber,
+            year_num: DateTime.local(DateTime.now()).year,
             history: [],
             is_on_enter_activity: false
         }
@@ -20,19 +21,26 @@ class ViewHistory extends Component{
         this.getHistLog(this.state.week_num);
     }
 
-    getHistWeek = (week) =>{
+    getHistWeek = (week, year) =>{
         this.setState({week_num: week});
-        this.getHistLog(week);
+        this.setState({year_num: year});
+        this.getHistLog(week, year);
     }
 
-    getHistLog = (week) => {
-        const encoded_week = encodeURIComponent(week);
+    getHistLog = (week, year) => {
+        const dt = DateTime.fromObject({
+            weekYear: year,
+            weekNumber: week
+        });
+        let day_one_raw = dt.startOf('week');
+        let day_seven_raw = dt.startOf('week').plus({ days: 6 });
+        const day_one = encodeURIComponent(day_one_raw.toString());
+        const day_seven = encodeURIComponent(day_seven_raw.toString());
         const id = encodeURIComponent(this.props.user_id);
-        fetch(`${config.app.host}histLog/?week_num=${encoded_week}&user_id=${id}`)
+        fetch(`${config.app.host}histLog/?day_one=${day_one}&day_seven=${day_seven}&user_id=${id}`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({history: res}));
-
     }
 
     handleClick = () => {
@@ -81,7 +89,7 @@ class ViewHistory extends Component{
         let display_style = this.state.week_num === current_week ? "visible": "hidden"
         return (
             <div>
-                <WeekSelector title={"Activity Log"} sendWeek = {this.getHistWeek}/>
+                <WeekSelector title={"Activity Log"} sendWeekAndYear = {this.getHistWeek}/>
                 <button style={{visibility: display_style}} type={"button"} className={"hist-button"} onClick={this.handleClick}>Add To Log</button>
                 {this.histUI()}
             </div>

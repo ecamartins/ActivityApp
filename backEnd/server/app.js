@@ -21,7 +21,12 @@ connection.connect();
 
 app.get('/ranking', (req, res) => {
     let week = Number(req.query.week_num);
-    connection.query(`select first_name, last_name, target_minutes, sum(duration) as total, sum(duration)/target_minutes*100 as percent from (select * from goals where week_num = '${week}') as filtered_goals natural join users natural join (select * from history where week(date) = '${week}') as weekly_hist group by users.user_id order by percent desc, total desc`, (err, rows) => {
+    let year = Number(req.query.year);
+    let day_one = req.query.day_one;
+    let day_seven = req.query.day_seven;
+
+    //connection.query(`select first_name, last_name, target_minutes, sum(duration) as total, sum(duration)/target_minutes*100 as percent from (select * from goals where week_num = '${week}') as filtered_goals natural join users natural join (select * from history where week(date) = '${week}') as weekly_hist group by users.user_id order by percent desc, total desc`, (err, rows) => {
+    connection.query(`select first_name, last_name, target_minutes, sum(duration) as total, sum(duration)/target_minutes*100 as percent from (select * from goals where week_num = '${week}' and year = '${year}') as filtered_goals natural join users natural join (select * from history where date between '${day_one}' and '${day_seven}') as weekly_hist group by users.user_id order by percent desc, total desc`, (err, rows) => {
         if (err) throw err
         let response = [];
 
@@ -42,9 +47,10 @@ app.get('/ranking', (req, res) => {
 })
 
 app.get('/histLog', (req, res) => {
-    let week = Number(req.query.week_num);
+    let day_one = req.query.day_one;
+    let day_seven = req.query.day_seven;
     let user_id = Number(req.query.user_id);
-    connection.query(`select activity_name, duration, date, hist_id from history natural join users natural join activities where week(date) = '${week}' and user_id = '${user_id}' order by date asc`, (err, rows) => {
+    connection.query(`select activity_name, duration, date, hist_id from history natural join users natural join activities where user_id = '${user_id}' and date between '${day_one}' and '${day_seven}' order by date asc`, (err, rows) => {
         if (err) throw err
         let response = [];
 
@@ -98,8 +104,11 @@ app.post('/addToLog', (req, res) => {
 
 app.get('/userActivityHistory', (req, res) => {
     let user_id = Number(req.query.user_id);
-    let week = Number(req.query.week);
-    connection.query(`select * from goals where user_id = '${user_id}' and week_num = '${week}'`, (err, info) => {
+    let day_one = req.query.day_one;
+    let day_seven = req.query.day_seven;
+    let week = req.query.week_num;
+    let year = req.query.year;
+    connection.query(`select * from goals where user_id = '${user_id}' and week_num = '${week}' and year = '${year}'`, (err, info) => {
         if (err) throw err
         let response = {};
         //if the results of the query are empty, then the user has not set their weekly goal
@@ -113,7 +122,7 @@ app.get('/userActivityHistory', (req, res) => {
 
             // otherwise, goal is set so check if user has history for given week
         } else {
-            connection.query(`select * from history where user_id = '${user_id}' and week(date) = '${week}'`, (err, info2) => {
+            connection.query(`select * from history where user_id = '${user_id}' and date between '${day_one}' and '${day_seven}'`, (err, info2) => {
                 if (err) throw err
                 // if there is no history, then the user only has a goal with no entered history for the given week
                 if (info2.length == 0){
@@ -125,7 +134,8 @@ app.get('/userActivityHistory', (req, res) => {
                     res.send(response);
                     // otherwise, the user has both a goal and history for given week, get compute total and percent
                 } else{
-                    connection.query(`select target_minutes, sum(duration) as total, sum(duration)/target_minutes *100 as percent from history natural join goals where user_id = '${user_id}' and week(date) = '${week}' and week_num = '${week}';`, (err, info3) => {
+                    connection.query(`select target_minutes, sum(duration) as total, sum(duration)/target_minutes *100 as percent from history natural join goals where user_id = '${user_id}' and year = '${year}' and week_num = '${week}' and date between '${day_one}' and '${day_seven}';`, (err, info3) => {
+                    //connection.query(`select target_minutes, sum(duration) as total, sum(duration)/target_minutes *100 as percent from history natural join goals where user_id = '${user_id}' and week(date) = '${week}' and week_num = '${week}'`, (err, info3) => {
                         if (err) throw err
                         let response = {
                             target_minutes: info3[0].target_minutes,

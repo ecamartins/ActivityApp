@@ -18,6 +18,7 @@ class UserProfile extends Component{
             total: 0,
             percent: 0,
             week: DateTime.local(DateTime.now()).weekNumber,
+            year: DateTime.local(DateTime.now()).year,
             is_on_addToLog: false
         }
     }
@@ -41,9 +42,20 @@ class UserProfile extends Component{
 
 
     getUserActivityHistory = () => {
+        const dt = DateTime.fromObject({
+            weekYear: this.state.year,
+            weekNumber: this.state.week
+        });
+        let day_one_raw = dt.startOf('week');
+        let day_seven_raw = dt.startOf('week').plus({ days: 6 });
+        const day_one = encodeURIComponent(day_one_raw.toString());
+        const day_seven = encodeURIComponent(day_seven_raw.toString());
+
+        const week = encodeURIComponent(this.state.week);
+        const year= encodeURIComponent(this.state.year);
         const id = encodeURIComponent(this.state.user_id);
-        const cur_week = encodeURIComponent(this.state.week);
-        fetch(`${config.app.host}userActivityHistory/?user_id=${id}&week=${cur_week}`)
+
+        fetch(`${config.app.host}userActivityHistory/?user_id=${id}&day_one=${day_one}&day_seven=${day_seven}&week_num=${week}&year=${year}`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({

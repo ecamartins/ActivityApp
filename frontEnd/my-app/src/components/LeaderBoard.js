@@ -11,32 +11,40 @@ class LeaderBoard extends Component {
         super(props);
         this.state = {
             ranking: [],
-            // default week_num is current week
-            week_num: DateTime.local(DateTime.now()).weekNumber
+            week_num: DateTime.local(DateTime.now()).weekNumber,
+            year: DateTime.local(DateTime.now()).year
         }
     }
 
     componentDidUpdate(prevState, prevProps, snap) {
-        if(this.props.update_board == true)
-        {
-            this.getRanking(this.state.week_num);
+        if(this.props.update_board == true) {
+            // delay function call for 100 milliseconds to ensure post call with new log entry is complete
+            setTimeout(this.getRanking,100,this.state.week_num,this.state.year);
             // update is complete so set the state of get_board_update in Main to false
             this.props.update_incomplete(false);
         }
     }
-
     componentDidMount(){
-        this.getRanking(this.state.week_num);
+        this.getRanking(this.state.week_num, this.state.year);
     }
-
-    setWeekNum = (week) =>{
-        this.setState({week_num: week})
-        this.getRanking(week);
+    setWeekAndYear = (week, year) =>{
+        this.setState({week_num: week});
+        this.setState({year: year});
+        this.getRanking(week, year);
     }
-
-    getRanking = (week) => {
+    getRanking = (week, year) => {
+        const dt = DateTime.fromObject({
+            weekYear: year,
+            weekNumber: week
+        });
+        let day_one_raw = dt.startOf('week');
+        let day_seven_raw = dt.startOf('week').plus({ days: 6 });
+        const day_one = encodeURIComponent(day_one_raw.toString());
+        const day_seven = encodeURIComponent(day_seven_raw.toString());
+        const encoded_year = encodeURIComponent(year);
         const encoded_week = encodeURIComponent(week);
-        fetch(`${config.app.host}ranking/?week_num=${encoded_week}`)
+
+        fetch(`${config.app.host}ranking/?week_num=${encoded_week}&day_one=${day_one}&day_seven=${day_seven}&year=${encoded_year}`)
             .then(res => res.text())
             .then(res => JSON.parse(res))
             .then(res => this.setState({ ranking: res }));
@@ -62,7 +70,7 @@ class LeaderBoard extends Component {
     render(){
         return(
         <div className={"board"}>
-            <WeekSelector title={"Leader Board"} sendWeek={this.setWeekNum}/>
+            <WeekSelector title={"Leader Board"} sendWeekAndYear={this.setWeekAndYear}/>
             <div className={"ranking-container"}>
                 {this.leaderBoardUI()}
             </div>

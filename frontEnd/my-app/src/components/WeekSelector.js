@@ -2,10 +2,6 @@ import React, {Component} from 'react';
 import {DateTime} from "luxon";
 import "../styles/WeekSelector.css"
 
-
-
-
-
 class WeekSelector extends Component{
     constructor(props){
         super(props);
@@ -21,7 +17,7 @@ class WeekSelector extends Component{
         this.setState({date: DateTime.now().startOf('week'),
                             week_num: DateTime.local(DateTime.now()).weekNumber,
                             year_num: DateTime.local(DateTime.now()).year});
-        this.props.sendWeek(DateTime.local(DateTime.now()).weekNumber);
+        this.props.sendWeekAndYear(DateTime.local(DateTime.now()).weekNumber, DateTime.local(DateTime.now()).year);
     }
 
     handlePrevClick = () =>{
@@ -29,7 +25,7 @@ class WeekSelector extends Component{
         this.setState({week_num: prev_week.weekNumber,
                             year_num: prev_week.year,
                             date: prev_week});
-        this.props.sendWeek(prev_week.weekNumber);
+        this.props.sendWeekAndYear(prev_week.weekNumber, prev_week.year);
     }
 
     handleNextClick = () =>{
@@ -40,7 +36,7 @@ class WeekSelector extends Component{
         this.setState({week_num: next_week.weekNumber,
             year_num: next_week.year,
             date: next_week});
-        this.props.sendWeek(next_week.weekNumber);
+        this.props.sendWeekAndYear(next_week.weekNumber, next_week.year);
     }
 
         render(){
