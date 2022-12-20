@@ -9,8 +9,8 @@ class ViewHistory extends Component{
     constructor(props){
         super(props);
         this.state = {
-            week_num: DateTime.local(DateTime.now()).weekNumber,
-            year_num: DateTime.local(DateTime.now()).year,
+            week_num: DateTime.local().setZone('America/Vancouver').weekNumber,
+            year_num: DateTime.local().setZone('America/Vancouver').year,
             history: [],
             is_on_enter_activity: false
         }
@@ -28,10 +28,11 @@ class ViewHistory extends Component{
     }
 
     getHistLog = (week, year) => {
-        const dt = DateTime.fromObject({
+        let dt = DateTime.fromObject({
             weekYear: year,
             weekNumber: week
         });
+        dt = dt.setZone('America/Vancouver');
         let day_one_raw = dt.startOf('week');
         let day_seven_raw = dt.startOf('week').plus({ days: 6 });
         const day_one = encodeURIComponent(day_one_raw.toString());
@@ -85,7 +86,7 @@ class ViewHistory extends Component{
     }
 
     render(){
-        const current_week = DateTime.local(DateTime.now()).weekNumber;
+        const current_week = DateTime.local().setZone('America/Vancouver').weekNumber;
         let display_style = this.state.week_num === current_week ? "visible": "hidden"
         return (
             <div>

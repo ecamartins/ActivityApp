@@ -17,8 +17,8 @@ class UserProfile extends Component{
             target_minutes: -1,
             total: 0,
             percent: 0,
-            week: DateTime.local(DateTime.now()).weekNumber,
-            year: DateTime.local(DateTime.now()).year,
+            week: DateTime.local().setZone('America/Vancouver').weekNumber,
+            year: DateTime.local().setZone('America/Vancouver').year,
             is_on_addToLog: false
         }
     }
@@ -42,10 +42,11 @@ class UserProfile extends Component{
 
 
     getUserActivityHistory = () => {
-        const dt = DateTime.fromObject({
+        let dt = DateTime.fromObject({
             weekYear: this.state.year,
-            weekNumber: this.state.week
+            weekNumber: this.state.week,
         });
+        dt = dt.setZone('America/Vancouver');
         let day_one_raw = dt.startOf('week');
         let day_seven_raw = dt.startOf('week').plus({ days: 6 });
         const day_one = encodeURIComponent(day_one_raw.toString());

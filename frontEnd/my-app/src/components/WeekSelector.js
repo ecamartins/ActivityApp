@@ -6,18 +6,19 @@ class WeekSelector extends Component{
     constructor(props){
         super(props);
         this.state = {
-            year_num: DateTime.local(DateTime.now()).year,
-            week_num: DateTime.local(DateTime.now()).weekNumber,
-            date: DateTime.now().startOf('week')
+            year_num: DateTime.local().setZone('America/Vancouver').year,
+            week_num: DateTime.local().setZone('America/Vancouver').weekNumber,
+            date: DateTime.local().setZone('America/Vancouver').startOf('week')
 
         }
     }
 
     handleCurrentClick = () =>{
-        this.setState({date: DateTime.now().startOf('week'),
-                            week_num: DateTime.local(DateTime.now()).weekNumber,
-                            year_num: DateTime.local(DateTime.now()).year});
-        this.props.sendWeekAndYear(DateTime.local(DateTime.now()).weekNumber, DateTime.local(DateTime.now()).year);
+        let dt = DateTime.local().setZone('America/Vancouver');
+        this.setState({date: dt.startOf('week'),
+                            week_num: dt.weekNumber,
+                            year_num: dt.year});
+        this.props.sendWeekAndYear(dt.weekNumber, dt.year);
     }
 
     handlePrevClick = () =>{
@@ -30,7 +31,9 @@ class WeekSelector extends Component{
 
     handleNextClick = () =>{
         let next_week = this.state.date.plus({ days: 7 });
-        if (DateTime.now().startOf('week') < next_week){
+        let cur = DateTime.local().setZone('America/Vancouver').startOf('week');
+
+        if (cur < next_week){
             return;
         }
         this.setState({week_num: next_week.weekNumber,

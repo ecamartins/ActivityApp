@@ -12,7 +12,7 @@ class AddToLog extends Component {
             activity_id: -2,
             activity_name: '',
             duration: 0,
-            date: DateTime.local(DateTime.now()).toISODate(),
+            date: DateTime.local().setZone('America/Vancouver'),
             activities: [],
             create_activity: false,
             weekday: "Monday",
@@ -80,7 +80,8 @@ class AddToLog extends Component {
 
     weekdayToDate = (weekday) => {
         let offset = this.getDateOffset(weekday);
-        let correct_date = DateTime.now().startOf('week').plus({ days: offset });
+        let date = DateTime.local().setZone('America/Vancouver');
+        let correct_date = date.startOf('week').plus({ days: offset });
         this.setState({date: correct_date});
     }
 
@@ -141,7 +142,7 @@ class AddToLog extends Component {
             activity_id: -2,
             activity_name: '',
             duration: 0,
-            date: DateTime.local(DateTime.now()).startOf('week').toISODate()}
+            date: DateTime.local().setZone('America/Vancouver').startOf('week')}
         )
         this.getActivityList();
         this.props.is_on_addToLog(false)
@@ -163,7 +164,8 @@ class AddToLog extends Component {
 
         for (let i = 0; i < weekdays.length; i++){
             let offset = this.getDateOffset(weekdays[i]);
-            let entry = DateTime.now().startOf('week').plus({ days: offset }).toLocaleString(DateTime.DATE_HUGE);
+            let week_start = DateTime.local().setZone('America/Vancouver').startOf('week');
+            let entry = week_start.plus({ days: offset }).toLocaleString(DateTime.DATE_HUGE);
             weekday_options[i] = <option id = {weekdays[i]} value={weekdays[i]}>{entry}</option>
         }
         return weekday_options;

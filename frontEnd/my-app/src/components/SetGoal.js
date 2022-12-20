@@ -19,7 +19,7 @@ class SetGoal extends Component {
                 user_id: this.props.user_id,
                 target_minutes: this.state.target_minutes,
                 week: this.props.week,
-                year: DateTime.local(DateTime.now()).year
+                year: DateTime.local().setZone('America/Vancouver').year
             });
 
         fetch(`${config.app.host}submitGoal`, {

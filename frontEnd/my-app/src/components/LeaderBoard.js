@@ -11,15 +11,15 @@ class LeaderBoard extends Component {
         super(props);
         this.state = {
             ranking: [],
-            week_num: DateTime.local(DateTime.now()).weekNumber,
-            year: DateTime.local(DateTime.now()).year
+            week_num: DateTime.local().setZone('America/Vancouver').weekNumber,
+            year: DateTime.local().setZone('America/Vancouver').year
         }
     }
 
     componentDidUpdate(prevState, prevProps, snap) {
         if(this.props.update_board == true) {
-            // delay function call for 100 milliseconds to ensure post call with new log entry is complete
-            setTimeout(this.getRanking,100,this.state.week_num,this.state.year);
+            // delay function call for 500 milliseconds to ensure post call with new log entry is complete
+            setTimeout(this.getRanking,500,this.state.week_num,this.state.year);
             // update is complete so set the state of get_board_update in Main to false
             this.props.update_incomplete(false);
         }
@@ -33,10 +33,10 @@ class LeaderBoard extends Component {
         this.getRanking(week, year);
     }
     getRanking = (week, year) => {
-        const dt = DateTime.fromObject({
+        let dt = DateTime.fromObject({
             weekYear: year,
             weekNumber: week
-        });
+        }).setZone('America/Vancouver');
         let day_one_raw = dt.startOf('week');
         let day_seven_raw = dt.startOf('week').plus({ days: 6 });
         const day_one = encodeURIComponent(day_one_raw.toString());
