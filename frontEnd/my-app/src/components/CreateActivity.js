@@ -139,7 +139,7 @@ class CreateActivity extends Component{
 
         return (
             <div className={"create-activity"}>
-                <h2>Enter New Activity:</h2>
+                <h2>Enter New Activity</h2>
                 <form>
                     <label style = {{color: text_colour}}><br/>Activity Name:<br/></label>
                     <input type="text"

@@ -183,7 +183,7 @@ class AddToLog extends Component {
         }else {
                 return (
                     <div className={"log-container"}>
-                        <h2>Add to Weekly Log:</h2>
+                        <h2>Add to Weekly Log</h2>
                         <form>
                             <label style={{color: activity_colour}}> Activity Name: </label>
                             <select style={{color: activity_colour, borderColor: activity_border}}

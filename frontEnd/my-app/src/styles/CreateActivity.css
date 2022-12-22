@@ -1,7 +1,6 @@
 .create-activity > h2{
     font-family: LilitaOne;
     text-align: left;
-    margin-left: 10%;
 }
 .create-activity > form > button {
     width: 20vh;
@@ -31,12 +30,17 @@
 .create-activity > form {
     border-radius: 5px;
     background-color: #f2f2f2;
-    padding: 20px;
-    width: 60vh;
-    margin-left: 10%;
+    padding: 2vh;
+    width: 50vh;
 }
 
 .create-activity > form > p{
     color: red;
     font-weight: bold;
+}
+
+.create-activity{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
