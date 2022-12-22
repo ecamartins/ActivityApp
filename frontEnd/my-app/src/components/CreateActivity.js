@@ -17,6 +17,10 @@ class CreateActivity extends Component{
     }
 
     handleSubmit = () => {
+        if (this.state.invalid_activity){
+            return;
+        }
+
         //only add new activity if it does not exist in current list
         if (!this.isRepeat(this.state.activity_name)) {
             const body = JSON.stringify(
@@ -89,7 +93,6 @@ class CreateActivity extends Component{
 
         if (this.isValidActivity(new_activity)) {
             this.handleSubmit();
-            return;
         }
     }
 
@@ -122,7 +125,7 @@ class CreateActivity extends Component{
 
         for (let i = 0; i < activities.length; i++){
             let pat = new RegExp(`^${activities[i].activity_name}(?:ing|ed)?\s*$`);
-            if (pat.test(new_activity)){ //match found
+            if (pat.test(new_activity) || activities[i] === new_activity){ //match found
                 return true;
             }
         }
