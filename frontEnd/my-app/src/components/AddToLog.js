@@ -147,9 +147,10 @@ class AddToLog extends Component {
         this.getActivityList();
         this.props.is_on_addToLog(false)
     }
+
+
     closeCreate = (flag) =>{
         this.getActivityList();
-        this.props.is_on_addToLog(false);
         this.setState({create_activity: flag});
         this.setState({activity_id: -2}); // reset dropdown to display select activity option
     }

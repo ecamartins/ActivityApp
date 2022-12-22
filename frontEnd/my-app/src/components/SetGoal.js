@@ -9,10 +9,17 @@ class SetGoal extends Component {
         super(props);
         this.state = {
             target_minutes: 0,
+            goal_above_zero: true,
+            goal_is_int: true
         }
     }
 
     handleSubmit = () => {
+
+        // if goal is not an int and is not >0 then don't submit
+        if (!this.isValidGoal(this.state.target_minutes)){
+            return;
+        }
 
         const body = JSON.stringify(
             {
@@ -38,20 +45,48 @@ class SetGoal extends Component {
         this.props.sendGoal(this.state.target_minutes);
     }
 
+    isValidGoal = (goal) =>{
+        goal = Number(goal);
+
+        if (goal <= 0 || !Number.isInteger(goal)){
+            if (goal <= 0){
+                this.setState({goal_above_zero: false});
+            } else{
+                this.setState({goal_above_zero: true});
+            }
+            if (!Number.isInteger(goal)){
+                this.setState({goal_is_int: false});
+            } else{
+                this.setState({goal_is_int: true});
+            }
+
+            return false;
+        }
+
+        // otherwise the goal is valid
+        this.setState({goal_above_zero: true,  goal_is_int: true});
+        return true;
+    }
+
     handleGoal = (event) => {
         let goal = event.target.value;
+        this.isValidGoal(goal);
         this.setState({target_minutes: goal})
     }
 
     render() {
+        let week_start = DateTime.local().setZone('America/Vancouver').startOf("week");
         return (
             <div className={"new-goal-container"}>
-                <h2>Set goal for week {this.props.week}:</h2>
+                <h2>Weekly Goal</h2>
+                <p>Week of {week_start.toFormat('MMMM dd, yyyy')}</p>
                 <form>
-                    <label>Enter target minutes for this week:</label><br/>
+                    <label>Enter your target minutes for this week:</label><br/><br/>
                     <input type="number" defaultValue={0}  value={this.state.target_minutes} min={0} max={10000}
                            onChange={this.handleGoal}/>
-                    <button value="Submit" onClick={this.handleSubmit}>Submit</button>
+                    <button type={"button"} value="Submit" onClick={this.handleSubmit}>Submit</button>
+                    {!this.state.goal_above_zero ? <p id={"invalid"}>Goal must be > 0 minutes.</p>: null}
+                    {!this.state.goal_is_int? <p id={"invalid"}>Goal must be an integer.</p>: null}
                 </form>
             </div>
         )

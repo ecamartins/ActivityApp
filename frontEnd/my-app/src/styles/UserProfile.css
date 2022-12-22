@@ -16,18 +16,14 @@
     flex-direction: column;
 }
 
-button.hist-button{
-    width: 15vh;
-    background-color: #63d0ff;
-    color: black;
-    padding: 14px 20px;
-    margin-left: 8vh;
-    margin-bottom: 1vh;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+#notice{
+    text-align: center;
+    color: red;
 }
 
-button.hist-button:hover {
-    background-color: rgba(7, 112, 196, 0.9);
+.summary > table{
+    text-align: center;
+    margin: 0 auto 0 auto;
+    background-color: #f2f2f2;
+    width: 60vh;
 }

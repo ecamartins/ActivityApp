@@ -19,7 +19,8 @@ class UserProfile extends Component{
             percent: 0,
             week: DateTime.local().setZone('America/Vancouver').weekNumber,
             year: DateTime.local().setZone('America/Vancouver').year,
-            is_on_addToLog: false
+            is_on_addToLog: false,
+            weekly_goal_set: false
         }
     }
 
@@ -77,6 +78,7 @@ class UserProfile extends Component{
 
     getGoal = (goal) =>{
         this.setState({target_minutes: goal});
+        this.setState({weekly_goal_set: true});
     }
 
     hideAddToLog = (flag) =>{
@@ -88,30 +90,47 @@ class UserProfile extends Component{
     render() {
         if (this.state.target_minutes == -1) {
             return (
-                <div className={"user-profile"}>
-                    <h1>•• {this.state.first_name} {this.state.last_name}'s Profile ••</h1>
-                <SetGoal
-                    sendGoal={this.getGoal}
-                    user_id={this.state.user_id}
-                    target_minutes={this.state.target_minutes}
-                    week={this.state.week}/>
+                <div>
+                    <div className={"user-profile"}>
+                        <h1>•• {this.state.first_name} {this.state.last_name}'s Profile ••</h1>
+                        <SetGoal
+                            sendGoal={this.getGoal}
+                            user_id={this.state.user_id}
+                            target_minutes={this.state.target_minutes}
+                            week={this.state.week}/>
+                    </div>
+                    <p id={"notice"}> Note: You will be permitted to add to your weekly log once you've set a goal.</p>
+                    <ViewHistory
+                        is_on_addToLog={this.hideAddToLog}
+                        hide_add_button={!this.state.weekly_goal_set}
+                        user_id={this.state.user_id}
+                    />
                 </div>
             )
+
         } else {
             let hist_display = <ViewHistory is_on_addToLog={this.hideAddToLog} user_id = {this.state.user_id}/>;
+            let add_to_log = <AddToLog className={"log"} is_on_addToLog={this.hideAddToLog} hide_add_button={false} user_id={this.props.user_id}/>;
+            let week_start = DateTime.local().setZone('America/Vancouver').startOf("week");
+            let percent_done = this.state.percent > 100 ? ">100" : this.state.percent.toFixed(1)+"";
             return (
                 <div className={"user-profile"}>
                     <h1>•• {this.state.first_name} {this.state.last_name}'s Profile ••</h1>
                     <div className={"summary"}>
-                        <h2>Weekly Goal: {this.state.target_minutes} min</h2>
-                        <p>Total Minutes: {this.state.total} min</p>
-                        <p>Remaining Minutes: {this.getRemaining()} min</p>
-                        {this.state.percent > 100 ? <p>Percentage Completed: > 100%</p>: <p>Percentage Completed: {this.state.percent.toFixed(1)}%</p>}
+                        <h2>Weekly Progress</h2>
+                        <p>Week of {week_start.toFormat('MMMM dd, yyyy')}</p>
+                        <table>
+                            <thead>
+                            <tr id={"table-header"}><th>Goal (min)</th><th>Remaining (min)</th><th>Percentage Completed (%)</th></tr>
+                            </thead>
+                            <tbody>
+                            <tr><td>{this.state.target_minutes}</td><td>{this.getRemaining()}</td>{percent_done}</tr>
+                            </tbody>
+                        </table>
                     </div>
-                    {this.state.is_on_addToLog ?
-                        <AddToLog className={"log"} is_on_addToLog={this.hideAddToLog} user_id={this.props.user_id}/>:hist_display}
-
-                </div>)
+                    {this.state.is_on_addToLog ? add_to_log: hist_display}
+                </div>
+                )
         }
     }
 }

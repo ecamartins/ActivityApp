@@ -25,15 +25,14 @@ app.get('/ranking', (req, res) => {
     let day_one = req.query.day_one;
     let day_seven = req.query.day_seven;
 
-    //connection.query(`select first_name, last_name, target_minutes, sum(duration) as total, sum(duration)/target_minutes*100 as percent from (select * from goals where week_num = '${week}') as filtered_goals natural join users natural join (select * from history where week(date) = '${week}') as weekly_hist group by users.user_id order by percent desc, total desc`, (err, rows) => {
-    connection.query(`select first_name, last_name, target_minutes, sum(duration) as total, sum(duration)/target_minutes*100 as percent from (select * from goals where week_num = '${week}' and year = '${year}') as filtered_goals natural join users natural join (select * from history where date between '${day_one}' and '${day_seven}') as weekly_hist group by users.user_id order by percent desc, total desc`, (err, rows) => {
+    connection.query(`select user_id, first_name, last_name, target_minutes, sum(duration) as total, sum(duration)/target_minutes*100 as percent from (select * from goals where week_num = '${week}' and year = '${year}') as filtered_goals natural join users natural join (select * from history where date between '${day_one}' and '${day_seven}') as weekly_hist group by users.user_id order by percent desc, total desc`, (err, rows) => {
         if (err) throw err
         let response = [];
-
 
         for (let row of rows) {
             response.push(
                 {
+                    user_id: row.user_id,
                     first_name: row.first_name,
                     last_name: row.last_name,
                     target_minutes: row.target_minutes,
@@ -96,9 +95,21 @@ app.post('/addToLog', (req, res) => {
         if (err) throw err
         let cur_id = rows[0].max_id;
         cur_id = cur_id + 1;
-        connection.query(`insert into history (user_id, activity_id, duration, date, hist_id) values ('${user_id}','${activity_id}', '${duration}', '${date}', ${cur_id})`,(err, rows) => {
+        connection.query(`insert into history (user_id, activity_id, duration, date, hist_id) 
+                            values ('${user_id}','${activity_id}', '${duration}', 
+                            '${date}', ${cur_id})`,(err, rows) => {
             res.send();
         })
+    })
+})
+
+
+app.delete('/deleteLogEntry', (req, res) => {
+    const hist_id = Number(req.body.hist_id);
+
+    connection.query(`delete from history where hist_id = '${hist_id}'`, (err, rows) => {
+        if (err) throw err
+        res.send();
     })
 })
 
@@ -177,20 +188,6 @@ app.post('/createUser', (req, res) => {
         connection.query(`INSERT INTO users (user_id, first_name, last_name) VALUES (${cur_id},'${first_name}', '${last_name}')`,(err, rows) => {
             res.send();
         })
-    })
-})
-
-app.get('/maxId', (req, res) => {
-    connection.query(`select max(user_id) as max_id from users`, (err, id) => {
-        if (err) throw err
-        res.send({id:id[0].max_id});
-    })
-})
-
-app.get('/maxActId', (req, res) => {
-    connection.query(`select max(activity_id) as max_id from activities`, (err, id) => {
-        if (err) throw err
-        res.send({id:id[0].max_id});
     })
 })
 

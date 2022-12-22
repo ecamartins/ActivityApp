@@ -22,6 +22,10 @@ class SelectUser extends Component{
     }
 
     handleSubmit = () => {
+        if (this.state.user_id == -2){
+            alert("Invalid user.\nPlease select a user from the dropdown menu.");
+            return;
+        }
         this.props.parentCallback(this.state.user_id);
     }
 
@@ -63,7 +67,11 @@ class SelectUser extends Component{
         if (this.state.is_on_create_user){
             return(
                 <div className={"log-in-container"}>
-                    <CreateUser className={"new-user"} is_on_create_user={this.closeCreateUser}/>
+                    <CreateUser
+                        className={"new-user"}
+                        is_on_create_user={this.closeCreateUser}
+                        users = {this.state.users}
+                    />
                 </div>
             )
         }
@@ -79,7 +87,7 @@ class SelectUser extends Component{
                             <option value={-1}>-- create new user --</option>
                         </select>
                         <br/>
-                        <button className={"select-button"} value="Submit" onClick={this.handleSubmit}>Submit</button>
+                        <button type={"button"} className={"select-button"} value="Submit" onClick={this.handleSubmit}>Submit</button>
                     </label>
                 </form>
             </div>

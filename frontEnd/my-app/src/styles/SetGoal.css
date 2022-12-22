@@ -1,6 +1,6 @@
 .new-goal-container{
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column;
     justify-content: center;
     align-items: center;
 }
@@ -42,4 +42,9 @@
     font-family: LilitaOne;
     text-align: left;
     margin-right: 1vh;
+    margin-bottom: 1vh;
+}
+
+.new-goal-container > form > p{
+    color: red;
 }

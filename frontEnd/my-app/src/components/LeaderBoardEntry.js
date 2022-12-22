@@ -20,8 +20,8 @@ class LeaderBoardEntry extends Component {
                 </div>
                 <div className={"sub-container"}>
                     <h3 className={"name"}>{this.props.first_name} {this.props.last_name}</h3>
-                    <p>{this.props.total_minutes}/{this.props.target_minutes} min Total</p>
-                    {this.props.percentage > 100 ? <p>>100.0% Complete</p>:<p>{this.props.percentage.toFixed(1)}% Complete</p>}
+                    <p>Total: {this.props.total_minutes} min</p>
+                    {this.props.percentage > 100 ? <p>Completed: >100.0%</p>:<p>Completed: {this.props.percentage.toFixed(1)}%</p>}
                 </div>
             </div>
         )

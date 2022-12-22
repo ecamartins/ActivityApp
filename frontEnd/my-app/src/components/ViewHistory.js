@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {DateTime} from "luxon";
 import WeekSelector from "./WeekSelector";
 import "../styles/ViewHistory.css";
+import {IoTrash} from 'react-icons/io5';
 
 const config = require('../config');
 
@@ -48,6 +49,34 @@ class ViewHistory extends Component{
         this.props.is_on_addToLog(true);
     }
 
+    deleteEntry = (event) =>{
+        let hist_id = event.currentTarget.id;
+
+        const body = JSON.stringify(
+            {
+                hist_id: hist_id
+            }
+        );
+        //delete the log entry with the given hist_id
+        fetch(`${config.app.host}deleteLogEntry`, {
+            method: 'delete',
+            headers: { 'Content-Type': 'application/json' },
+            body: body
+        })
+            .catch(error => {
+                console.log(error);
+                alert("Error " + error)
+            })
+        // get updated history log for the given week and year
+        this.getHistLog(this.state.week, this.state.year);
+        this.getHistLog(this.state.week, this.state.year); //twice to deal with async problem
+        // use this flag to "tell" the leaderboard to re-render
+        this.props.is_on_addToLog(false);
+    }
+
+
+
+
     histUI = () => {
         if (this.state.history.length == 0){
             return (
@@ -64,21 +93,40 @@ class ViewHistory extends Component{
         let date;
         let cur = {};
         let total = 0;
+        let cur_week = DateTime.local().setZone('America/Vancouver').weekNumber;
+        let btn_visib = cur_week === this.state.week_num ? "visible" : "hidden";
         for (let i = 0; i < this.state.history.length; i++){
             cur = this.state.history[i];
-            name= cur.activity_name.charAt(0).toUpperCase() + cur.activity_name.slice(1,cur.activity_name.length);
+            name= cur.activity_name;
             duration = cur.duration;
             total += duration;
             date = DateTime.fromISO(cur.date).toLocaleString(DateTime.DATE_MED); //convert date to format like Oct. 31, 2022
-            hist_display[i] = <tr id={cur.hist_id}><td>{name}</td><td className={"mid-col"}>{duration}</td><td className={"right-col"}>{date}</td></tr>;
+            hist_display[i] = <tr id={cur.hist_id}>
+                                <td className={"left-col"}>{name}</td>
+                                <td className={"mid-col"}>{duration}</td>
+                                <td className={"right-col"}>{date}</td>
+                                <td>
+                                    <button
+                                        style={{visibility: btn_visib}}
+                                        id={cur.hist_id} type={"button"}
+                                        className={"trash"}
+                                        onClick={this.deleteEntry}>
+                                            <IoTrash size={"3vh"}/>
+                                    </button>
+                                </td>
+                            </tr>;
         }
         return (
             <div>
                 <div className={"history"}>
                     <table>
-                        <tr><th>Activity</th><th>Duration (min)</th><th>Date</th></tr>
+                        <thead>
+                        <tr><th>Activity</th><th>Duration (min)</th><th>Date</th><th id={"trash-header"}></th></tr>
+                        </thead>
+                        <tbody>
                         {hist_display}
                         <tr><td></td><td className={"mid-col"} id={"total-mins"}>{total}</td><td></td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -87,11 +135,13 @@ class ViewHistory extends Component{
 
     render(){
         const current_week = DateTime.local().setZone('America/Vancouver').weekNumber;
-        let display_style = this.state.week_num === current_week ? "visible": "hidden"
+        let display_style = (this.state.week_num === current_week) && !this.props.hide_add_button ? "visible": "hidden"
         return (
             <div>
                 <WeekSelector title={"Activity Log"} sendWeekAndYear = {this.getHistWeek}/>
-                <button style={{visibility: display_style}} type={"button"} className={"hist-button"} onClick={this.handleClick}>Add To Log</button>
+                <div className={"add-btn-container"}>
+                    <button style={{visibility: display_style}} type={"button"} className={"hist-button"} onClick={this.handleClick}>Add To Log</button>
+                </div>
                 {this.histUI()}
             </div>
         )

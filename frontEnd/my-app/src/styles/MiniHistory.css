@@ -1,0 +1,31 @@
+.mini-hist{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+}
+
+.mini-hist > table{
+    background-color: #f2f2f2;
+    margin-bottom: 1vh;
+    margin-left: 3vh;
+}
+
+.mini-hist > button{
+    width: 8vh;
+    height: 3vh;
+    align-self: flex-end;
+    margin-right: 5vh;
+    border: none;
+    background-color: #63d0ff;
+    border-radius: 4px;
+}
+
+.mini-hist > button:hover{
+    background-color: rgba(7, 112, 196, 0.9);
+}
+
+.mini-hist > h3{
+    text-align: center;
+}
+
+
