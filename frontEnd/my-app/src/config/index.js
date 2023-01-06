@@ -1,5 +1,5 @@
 module.exports = {
     app: {
-        host: "emily-martins-server/api/"
+        host: "physical-activity-tracker-server/api/"
     }
 };
