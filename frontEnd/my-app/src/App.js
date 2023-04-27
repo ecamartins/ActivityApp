@@ -3,6 +3,7 @@ import'./App.css';
 
 import Main from "./components/Main";
 import Header from "./components/Header"
+import TempLanding from "./components/TempLanding";
 
 
 class App extends Component {
@@ -19,12 +20,13 @@ class App extends Component {
 
     render(){
         return (
-            <div className={"page"}>
-                <Header send_logout_flag={this.getLogoutFlag} show_logout={this.state.is_on_user_page}/>
-                <div className={"main-container"}>
-                    <Main send_logout_flag={this.getLogoutFlag} is_on_user_page={this.state.is_on_user_page} />
-                </div>
-            </div>)
+            <TempLanding/>)
+            // <div className={"page"}>
+            //     <Header send_logout_flag={this.getLogoutFlag} show_logout={this.state.is_on_user_page}/>
+            //     <div className={"main-container"}>
+            //         <Main send_logout_flag={this.getLogoutFlag} is_on_user_page={this.state.is_on_user_page} />
+            //     </div>
+            // </div>)
     }
 }
 

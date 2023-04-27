@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.a9ea1d41.css",
-    "main.js": "/static/js/main.85d1cde4.js",
+    "main.css": "/static/css/main.309b66f6.css",
+    "main.js": "/static/js/main.928e778a.js",
     "static/js/787.28cb0dcd.chunk.js": "/static/js/787.28cb0dcd.chunk.js",
     "static/media/LilitaOne-Regular.ttf": "/static/media/LilitaOne-Regular.e970d047065ed950bb8c.ttf",
     "index.html": "/index.html",
-    "main.a9ea1d41.css.map": "/static/css/main.a9ea1d41.css.map",
-    "main.85d1cde4.js.map": "/static/js/main.85d1cde4.js.map",
+    "main.309b66f6.css.map": "/static/css/main.309b66f6.css.map",
+    "main.928e778a.js.map": "/static/js/main.928e778a.js.map",
     "787.28cb0dcd.chunk.js.map": "/static/js/787.28cb0dcd.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a9ea1d41.css",
-    "static/js/main.85d1cde4.js"
+    "static/css/main.309b66f6.css",
+    "static/js/main.928e778a.js"
   ]
 }

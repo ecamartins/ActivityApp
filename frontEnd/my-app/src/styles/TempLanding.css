@@ -1,0 +1,19 @@
+.landing-box{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
+
+.landing-box > h1{
+    font-weight: bold;
+}
+
+.tools-icon{
+    color: red;
+}
+
+
+
+
+

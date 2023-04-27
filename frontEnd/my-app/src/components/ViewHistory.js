@@ -111,7 +111,7 @@ class ViewHistory extends Component{
                                         id={cur.hist_id} type={"button"}
                                         className={"trash"}
                                         onClick={this.deleteEntry}>
-                                            <IoTrash size={"3vh"}/>
+                                            <IoTrash size={"3vh"}x/>
                                     </button>
                                 </td>
                             </tr>;
